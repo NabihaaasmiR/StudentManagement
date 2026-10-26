@@ -7,8 +7,8 @@ namespace StudentManagement
     {
         static void Main(string[] args)
         {
-            // A simple list to store student names in memory for now
-            List<string> students = new List<string>();
+            // Now using List<Student> instead of List<string>!
+            List<Student> students = new List<Student>();
             bool running = true;
 
             Console.WriteLine("=========================================");
@@ -31,7 +31,6 @@ namespace StudentManagement
                         DisplayStudents(students);
                         break;
                     case "2":
-
                         AddStudent(students);
                         break;
                     case "3":
@@ -45,7 +44,7 @@ namespace StudentManagement
             }
         }
 
-        static void DisplayStudents(List<string> students)
+        static void DisplayStudents(List<Student> students)
         {
             Console.WriteLine("\n--- Student List ---");
             if (students.Count == 0)
@@ -54,21 +53,36 @@ namespace StudentManagement
             }
             else
             {
-                for (int i = 0; i < students.Count; i++)
+                foreach (var student in students)
                 {
-                    Console.WriteLine($"{i + 1}. {students[i]}");
+                    student.DisplayInfo();
                 }
             }
         }
 
-        static void AddStudent(List<string> students)
+        static void AddStudent(List<Student> students)
         {
-            Console.Write("\nEnter the name of the student: ");
+            Console.Write("\nEnter Student ID (number): ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("Invalid ID. Please enter a number.");
+                return;
+            }
+
+            Console.Write("Enter Student Name: ");
             string name = Console.ReadLine();
+
+            Console.Write("Enter Student Age: ");
+            if (!int.TryParse(Console.ReadLine(), out int age))
+            {
+                Console.WriteLine("Invalid age. Please enter a number.");
+                return;
+            }
 
             if (!string.IsNullOrWhiteSpace(name))
             {
-                students.Add(name.Trim());
+                Student newStudent = new Student(id, name.Trim(), age);
+                students.Add(newStudent);
                 Console.WriteLine($"Successfully added {name.Trim()}!");
             }
             else
